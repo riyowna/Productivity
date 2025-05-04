@@ -4,14 +4,105 @@
     <meta charset="UTF-8">
     <title>Productivity Metrics Calculator</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .calculator { margin-bottom: 30px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
-        .input-group { margin: 10px 0; }
-        input { width: 120px; margin: 0 10px; padding: 5px; }
-        button { background: #007bff; color: white; border: none; padding: 8px 15px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .result { font-weight: bold; color: #28a745; }
-        h2 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 5px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 40px;
+            background: #e0e5ec;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #4d4d4d;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .calculator {
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 20px;
+            background: #e0e5ec;
+            box-shadow: 10px 10px 20px #bebebe,
+                       -10px -10px 20px #ffffff;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .formula {
+            font-size: 0.9em;
+            color: #666;
+            margin: 10px 0;
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        .input-group {
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input {
+            width: 120px;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #e0e5ec;
+            box-shadow: inset 5px 5px 10px #bebebe,
+                       inset -5px -5px 10px #ffffff;
+            color: #4d4d4d;
+            font-size: 1em;
+        }
+
+        button {
+            background: #e0e5ec;
+            color: #4d4d4d;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 5px 5px 10px #bebebe,
+                       -5px -5px 10px #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        button:active {
+            box-shadow: inset 5px 5px 10px #bebebe,
+                       inset -5px -5px 10px #ffffff;
+        }
+
+        .result {
+            font-weight: 600;
+            color: #4CAF50;
+            margin-left: 15px;
+            font-size: 1.1em;
+        }
+
+        h2 {
+            color: #5a5a5a;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                margin: 20px;
+            }
+            .calculator {
+                width: 95%;
+                padding: 15px;
+            }
+            .input-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
     </style>
 </head>
 <body>
@@ -19,116 +110,128 @@
 
     <!-- Phone Occupancy -->
     <div class="calculator">
-        <h2>Phone Occupancy</h2>
+        <h2>📞 Phone Occupancy</h2>
+        <div class="formula">Formula: Handle Hours / (Handle Hours + Avail Hours)</div>
         <div class="input-group">
-            Handle Hours: <input type="number" id="handleHours">
-            Avail Hours: <input type="number" id="availHours">
+            <input type="number" id="handleHours" placeholder="Handle Hours">
+            <input type="number" id="availHours" placeholder="Avail Hours">
             <button onclick="calculatePhoneOccupancy()">Calculate</button>
-            Result: <span class="result" id="phoneOccupancyResult"></span>
+            <div class="result" id="phoneOccupancyResult"></div>
         </div>
     </div>
 
     <!-- In-Chair Occupancy -->
     <div class="calculator">
-        <h2>In-Chair Occupancy</h2>
+        <h2>💺 In-Chair Occupancy</h2>
+        <div class="formula">Formula: (Total Staffed Time - Shrinkage) / Total Staffed Time</div>
         <div class="input-group">
-            Total Staffed Time: <input type="number" id="totalStaffed">
-            Shrinkage Hours: <input type="number" id="shrinkage">
+            <input type="number" id="totalStaffed" placeholder="Total Staffed">
+            <input type="number" id="shrinkage" placeholder="Shrinkage Hours">
             <button onclick="calculateInChairOccupancy()">Calculate</button>
-            Result: <span class="result" id="inChairResult"></span>
+            <div class="result" id="inChairResult"></div>
         </div>
     </div>
 
     <!-- Shrinkage % -->
     <div class="calculator">
-        <h2>Shrinkage Percentage</h2>
+        <h2>📉 Shrinkage Percentage</h2>
+        <div class="formula">Formula: Total Shrinkage Hours / Total Staffed Hours</div>
         <div class="input-group">
-            Total Shrinkage Hours: <input type="number" id="totalShrinkage">
-            Total Staffed Hours: <input type="number" id="totalStaffedHours">
+            <input type="number" id="totalShrinkage" placeholder="Shrinkage Hours">
+            <input type="number" id="totalStaffedHours" placeholder="Staffed Hours">
             <button onclick="calculateShrinkage()">Calculate</button>
-            Result: <span class="result" id="shrinkageResult"></span>
+            <div class="result" id="shrinkageResult"></div>
         </div>
     </div>
 
     <!-- Abandon Rate -->
     <div class="calculator">
-        <h2>Abandon Rate</h2>
+        <h2>📵 Abandon Rate</h2>
+        <div class="formula">Formula: Calls Abandoned / Calls Offered</div>
         <div class="input-group">
-            Calls Abandoned: <input type="number" id="abandoned">
-            Calls Offered: <input type="number" id="offered">
+            <input type="number" id="abandoned" placeholder="Abandoned">
+            <input type="number" id="offered" placeholder="Offered">
             <button onclick="calculateAbandonRate()">Calculate</button>
-            Result: <span class="result" id="abandonRateResult"></span>
+            <div class="result" id="abandonRateResult"></div>
         </div>
     </div>
 
     <!-- Service Level -->
     <div class="calculator">
-        <h2>Service Level</h2>
+        <h2>⚖️ Service Level</h2>
+        <div class="formula">Formula: (Answered - Over Threshold) / (Answered + Abandoned)</div>
         <div class="input-group">
-            Answered Calls: <input type="number" id="answered">
-            Answered Over Threshold: <input type="number" id="overThreshold">
-            Abandoned Calls: <input type="number" id="abandonedSL">
+            <input type="number" id="answered" placeholder="Answered">
+            <input type="number" id="overThreshold" placeholder="Over Threshold">
+            <input type="number" id="abandonedSL" placeholder="Abandoned">
             <button onclick="calculateServiceLevel()">Calculate</button>
-            Result: <span class="result" id="serviceLevelResult"></span>
+            <div class="result" id="serviceLevelResult"></div>
         </div>
     </div>
 
     <!-- AHT & UPH -->
     <div class="calculator">
-        <h2>AHT & UPH</h2>
+        <h2>⏱️ AHT & UPH</h2>
+        <div class="formula">AHT: (Take + ACTV + Hold)*60 / Total Calls | UPH: Total Calls / Handle Hours</div>
         <div class="input-group">
-            Take: <input type="number" id="take">
-            ACTV: <input type="number" id="actv">
-            Hold: <input type="number" id="hold">
-            Total Calls: <input type="number" id="totalCalls">
-            <button onclick="calculateAhtUph()">Calculate</button><br>
-            AHT: <span class="result" id="ahtResult"></span><br>
-            UPH: <span class="result" id="uphResult"></span>
+            <input type="number" id="take" placeholder="Take">
+            <input type="number" id="actv" placeholder="ACTV">
+            <input type="number" id="hold" placeholder="Hold">
+            <input type="number" id="totalCalls" placeholder="Total Calls">
+            <button onclick="calculateAhtUph()">Calculate</button>
+            <div class="result">
+                AHT: <span id="ahtResult"></span><br>
+                UPH: <span id="uphResult"></span>
+            </div>
         </div>
     </div>
 
     <!-- CSAT -->
     <div class="calculator">
-        <h2>CSAT</h2>
+        <h2>😊 CSAT</h2>
+        <div class="formula">Formula: Positive Surveys / Total Surveys</div>
         <div class="input-group">
-            Positive Surveys: <input type="number" id="positive">
-            Total Surveys: <input type="number" id="totalSurveys">
+            <input type="number" id="positive" placeholder="Positive">
+            <input type="number" id="totalSurveys" placeholder="Total">
             <button onclick="calculateCSAT()">Calculate</button>
-            Result: <span class="result" id="csatResult"></span>
+            <div class="result" id="csatResult"></div>
         </div>
     </div>
 
     <!-- Productivity -->
     <div class="calculator">
-        <h2>Productivity %</h2>
+        <h2>📈 Productivity %</h2>
+        <div class="formula">Formula: Productive Hours / Total Shift Time</div>
         <div class="input-group">
-            Productive Hours: <input type="number" id="prodHours">
-            Total Shift Time: <input type="number" id="totalShift">
+            <input type="number" id="prodHours" placeholder="Productive">
+            <input type="number" id="totalShift" placeholder="Total Shift">
             <button onclick="calculateProductivity()">Calculate</button>
-            Result: <span class="result" id="productivityResult"></span>
+            <div class="result" id="productivityResult"></div>
         </div>
     </div>
 
     <!-- Absenteeism -->
     <div class="calculator">
-        <h2>Absenteeism Rate</h2>
+        <h2>⏰ Absenteeism Rate</h2>
+        <div class="formula">Formula: Lost Hours / Scheduled Hours</div>
         <div class="input-group">
-            Lost Hours: <input type="number" id="lostHours">
-            Scheduled Hours: <input type="number" id="scheduledHours">
+            <input type="number" id="lostHours" placeholder="Lost Hours">
+            <input type="number" id="scheduledHours" placeholder="Scheduled">
             <button onclick="calculateAbsenteeism()">Calculate</button>
-            Result: <span class="result" id="absenteeismResult"></span>
+            <div class="result" id="absenteeismResult"></div>
         </div>
     </div>
 
     <!-- Attrition -->
     <div class="calculator">
-        <h2>Attrition Rate</h2>
+        <h2>📉 Attrition Rate</h2>
+        <div class="formula">Formula: Attrition HC / Average(Begin HC, End HC)</div>
         <div class="input-group">
-            Attrition HC: <input type="number" id="attritionHC">
-            Beginning HC: <input type="number" id="beginHC">
-            Ending HC: <input type="number" id="endHC">
+            <input type="number" id="attritionHC" placeholder="Attrition HC">
+            <input type="number" id="beginHC" placeholder="Begin HC">
+            <input type="number" id="endHC" placeholder="End HC">
             <button onclick="calculateAttrition()">Calculate</button>
-            Result: <span class="result" id="attritionResult"></span>
+            <div class="result" id="attritionResult"></div>
         </div>
     </div>
 
