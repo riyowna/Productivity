@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Productivity Metrics Assessment Form</title>
+    <title>Productivity Metrics Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -10,282 +10,430 @@
             padding: 20px;
             background-color: #f9f9f9;
         }
-        .form-container {
+        .calculator-container {
             background-color: white;
             padding: 25px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .form-header {
+        .calculator-header {
             text-align: center;
             margin-bottom: 30px;
             border-bottom: 2px solid #4285f4;
             padding-bottom: 15px;
         }
-        .form-section {
+        .calculator-section {
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid #eee;
         }
-        .form-question {
+        .calculator-input {
             margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
         }
-        .question-title {
+        .input-title {
             font-weight: bold;
             margin-bottom: 8px;
             color: #333;
         }
-        .form-description {
+        .input-description {
             color: #666;
             font-style: italic;
             margin-bottom: 5px;
             font-size: 0.9em;
         }
-        input[type="text"], input[type="number"], select {
-            width: 100%;
+        input[type="number"] {
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
             margin-top: 5px;
+            width: 100%;
         }
-        .submit-button {
-            background-color: #4285f4;
+        .calculation-result {
+            font-weight: bold;
+            color: #4285f4;
+            margin-top: 10px;
+            padding: 8px;
+            background-color: #f0f7ff;
+            border-radius: 4px;
+        }
+        .reset-button {
+            background-color: #f44336;
             color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            display: block;
-            margin: 20px auto 0;
-        }
-        .submit-button:hover {
-            background-color: #3367d6;
-        }
-        .required {
-            color: red;
-        }
-        .calculation-result {
-            font-weight: bold;
-            color: #4285f4;
-            margin-top: 10px;
-            display: block;
-        }
-        .radio-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            margin-top: 5px;
-        }
-        .radio-option {
-            display: flex;
-            align-items: center;
-        }
-        .radio-option input {
             margin-right: 10px;
-            width: auto;
+        }
+        .reset-button:hover {
+            background-color: #d32f2f;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .toggle-section {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+        .toggle-section h2 {
+            margin: 0;
+        }
+        .toggle-icon {
+            font-size: 24px;
+        }
+        .section-content {
+            display: none;
+            padding: 15px 0;
+        }
+        .section-content.active {
+            display: block;
+        }
+        .input-group {
+            display: flex;
+            gap: 15px;
+        }
+        .input-group input {
+            flex: 1;
+        }
+        .result-section {
+            background-color: #f0f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .result-label {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <div class="form-header">
-            <h1>Productivity Metrics Assessment Form</h1>
-            <p>Complete this form to track and calculate key productivity metrics</p>
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <h1>Productivity Metrics Calculator</h1>
+            <p>Enter values to automatically calculate key call center productivity metrics</p>
         </div>
 
-        <form id="productivityForm">
-            <!-- Agent Information Section -->
-            <div class="form-section">
-                <h2>Agent Information</h2>
-                
-                <div class="form-question">
-                    <div class="question-title">Agent Name <span class="required">*</span></div>
-                    <input type="text" name="agentName" required>
+        <div id="productivityCalculator">
+            <!-- ICO Calculator Section -->
+            <div class="toggle-section" onclick="toggleSection('icoSection')">
+                <h2>In Chair Occupancy (ICO) Calculator</h2>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div id="icoSection" class="section-content">
+                <div class="calculator-input">
+                    <div class="input-title">Total Staffed Time (Hours)</div>
+                    <div class="input-description">Usually 9 hours unless undertime or half-day</div>
+                    <input type="number" id="staffedTime" step="0.5" min="0" value="9">
                 </div>
                 
-                <div class="form-question">
-                    <div class="question-title">Date <span class="required">*</span></div>
-                    <input type="date" name="date" required>
+                <div class="calculator-input">
+                    <div class="input-title">Shrinkage Hours</div>
+                    <div class="input-description">Non-productive auxiliary time (meetings, system issues, coaching, lunch, etc.)</div>
+                    <input type="number" id="shrinkageHours" step="0.5" min="0" value="0">
                 </div>
                 
-                <div class="form-question">
-                    <div class="question-title">Team/Department</div>
-                    <input type="text" name="team">
+                <div class="result-section">
+                    <div class="result-item">
+                        <span class="result-label">In Chair Occupancy (ICO):</span>
+                        <span id="icoResult">100.00%</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Productive Hours:</span>
+                        <span id="productiveHoursResult">9.00 hours</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Time Tracking Section -->
-            <div class="form-section">
-                <h2>Time Tracking (Hours)</h2>
-                
-                <div class="form-question">
-                    <div class="question-title">Total Staffed Time <span class="required">*</span></div>
-                    <div class="form-description">Usually 9 hours unless undertime or half-day</div>
-                    <input type="number" name="staffedTime" id="staffedTime" step="0.5" min="0" required>
+            <!-- Call Handling Metrics Section -->
+            <div class="toggle-section" onclick="toggleSection('callHandlingSection')">
+                <h2>Call Handling Metrics Calculator</h2>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div id="callHandlingSection" class="section-content">
+                <div class="calculator-input">
+                    <div class="input-title">Total Calls Handled</div>
+                    <input type="number" id="totalCalls" min="0" value="0">
                 </div>
                 
-                <div class="form-question">
-                    <div class="question-title">Shrinkage Hours <span class="required">*</span></div>
-                    <div class="form-description">Non-productive auxiliary time (meetings, system issues, coaching, lunch, etc.)</div>
-                    <input type="number" name="shrinkageHours" id="shrinkageHours" step="0.5" min="0" required>
+                <div class="calculator-input">
+                    <div class="input-title">Total Talk Time (Hours)</div>
+                    <input type="number" id="talkTime" step="0.01" min="0" value="0">
                 </div>
                 
-                <div class="form-question">
-                    <div class="question-title">In Chair Occupancy (ICO)</div>
-                    <div class="form-description">Calculated: (Total Staffed Time - Shrinkage Hours) / Total Staffed Time × 100%</div>
-                    <div class="calculation-result" id="icoResult">0%</div>
+                <div class="calculator-input">
+                    <div class="input-title">Total Hold Time (Hours)</div>
+                    <input type="number" id="holdTime" step="0.01" min="0" value="0">
+                </div>
+                
+                <div class="calculator-input">
+                    <div class="input-title">Total After Call Work (ACW) Time (Hours)</div>
+                    <input type="number" id="acwTime" step="0.01" min="0" value="0">
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-item">
+                        <span class="result-label">Total Handle Time:</span>
+                        <span id="handleTimeResult">0.00 hours</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Average Handle Time (AHT):</span>
+                        <span id="ahtResult">0.00 minutes</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Units Per Hour (UPH):</span>
+                        <span id="uphResult">0.00 units/hour</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">After Call Work (ACW):</span>
+                        <span id="acwPercentResult">0.00% of handle time</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Call Handling Metrics -->
-            <div class="form-section">
-                <h2>Call Handling Metrics</h2>
-                
-                <div class="form-question">
-                    <div class="question-title">Total Calls Handled <span class="required">*</span></div>
-                    <input type="number" name="totalCalls" id="totalCalls" min="0" required>
+            <!-- Service Level Metrics Section -->
+            <div class="toggle-section" onclick="toggleSection('serviceLevelSection')">
+                <h2>Service Level Metrics Calculator</h2>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div id="serviceLevelSection" class="section-content">
+                <div class="calculator-input">
+                    <div class="input-title">Total Calls Offered</div>
+                    <input type="number" id="callsOffered" min="0" value="0">
                 </div>
                 
-                <div class="form-question">
-                    <div class="question-title">Total Talk Time (Hours) <span class="required">*</span></div>
-                    <input type="number" name="talkTime" id="talkTime" step="0.01" min="0" required>
+                <div class="calculator-input">
+                    <div class="input-title">Calls Answered Within 5 Seconds</div>
+                    <input type="number" id="callsUnder5" min="0" value="0">
                 </div>
                 
-                <div class="form-question">
-                    <div class="question-title">Total Hold Time (Hours)</div>
-                    <input type="number" name="holdTime" id="holdTime" step="0.01" min="0">
+                <div class="calculator-input">
+                    <div class="input-title">Average Speed of Answer (ASA) in Seconds</div>
+                    <input type="number" id="asa" step="0.1" min="0" value="0">
                 </div>
                 
-                <div class="form-question">
-                    <div class="question-title">Total After Call Work (ACW) Time (Hours)</div>
-                    <input type="number" name="acwTime" id="acwTime" step="0.01" min="0">
-                </div>
-                
-                <div class="form-question">
-                    <div class="question-title">Total Handle Time (Hours)</div>
-                    <div class="form-description">Calculated: Talk + Hold + ACW</div>
-                    <div class="calculation-result" id="handleTimeResult">0 hours</div>
-                </div>
-                
-                <div class="form-question">
-                    <div class="question-title">Average Handle Time (AHT) in Minutes</div>
-                    <div class="form-description">Calculated: (Total Handle Hours × 60) / Total Calls</div>
-                    <div class="calculation-result" id="ahtResult">0 minutes</div>
-                </div>
-                
-                <div class="form-question">
-                    <div class="question-title">Units Per Hour (UPH)</div>
-                    <div class="form-description">Calculated: Total Calls / Total Handle Hours</div>
-                    <div class="calculation-result" id="uphResult">0 units/hour</div>
+                <div class="result-section">
+                    <div class="result-item">
+                        <span class="result-label">Service Level (SL):</span>
+                        <span id="slResult">0.00%</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Service Level Metrics -->
-            <div class="form-section">
-                <h2>Service Level Metrics</h2>
-                
-                <div class="form-question">
-                    <div class="question-title">Total Calls Offered <span class="required">*</span></div>
-                    <input type="number" name="callsOffered" id="callsOffered" min="0" required>
+            <!-- Schedule Adherence Section -->
+            <div class="toggle-section" onclick="toggleSection('scheduleAdherenceSection')">
+                <h2>Schedule Adherence & Absence Calculator</h2>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div id="scheduleAdherenceSection" class="section-content">
+                <div class="calculator-input">
+                    <div class="input-title">Scheduled Work Days</div>
+                    <input type="number" id="scheduledDays" min="0" value="22">
                 </div>
                 
-                <div class="form-question">
-                    <div class="question-title">Calls Answered Within 5 Seconds <span class="required">*</span></div>
-                    <input type="number" name="callsUnder5" id="callsUnder5" min="0" required>
+                <div class="calculator-input">
+                    <div class="input-title">Daily Scheduled Hours</div>
+                    <input type="number" id="dailyHours" min="0" step="0.5" value="8">
                 </div>
                 
-                <div class="form-question">
-                    <div class="question-title">Average Speed of Answer (ASA) in Seconds</div>
-                    <input type="number" name="asa" id="asa" step="0.1" min="0">
+                <div class="calculator-input">
+                    <div class="input-title">Absence Days</div>
+                    <input type="number" id="absenceDays" min="0" value="0">
                 </div>
                 
-                <div class="form-question">
-                    <div class="question-title">Service Level (SL)</div>
-                    <div class="form-description">Calculated: (Calls Answered Within 5 Seconds / Total Calls Offered) × 100%</div>
-                    <div class="calculation-result" id="slResult">0%</div>
+                <div class="calculator-input">
+                    <div class="input-title">Total Tardiness (Hours)</div>
+                    <input type="number" id="tardiness" step="0.01" min="0" value="0">
+                </div>
+                
+                <div class="calculator-input">
+                    <div class="input-title">Schedule Adherence Points</div>
+                    <div class="input-description">How agent follows plotted schedule</div>
+                    <div class="input-group">
+                        <input type="number" id="actualPoints" min="0" placeholder="Actual Points" value="0">
+                        <input type="number" id="possiblePoints" min="1" placeholder="Possible Points" value="1">
+                    </div>
+                </div>
+                
+                <div class="result-section">
+                    <div class="result-item">
+                        <span class="result-label">Total Scheduled Hours:</span>
+                        <span id="scheduledHoursResult">176.00 hours</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total Lost Hours:</span>
+                        <span id="lostHoursResult">0.00 hours</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Absence Rate:</span>
+                        <span id="absenceRateResult">0.00%</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Schedule Adherence:</span>
+                        <span id="scheduleAdherenceResult">0.00%</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Schedule Adherence -->
-            <div class="form-section">
-                <h2>Schedule Adherence</h2>
-                
-                <div class="form-question">
-                    <div class="question-title">Scheduled Work Days This Month</div>
-                    <input type="number" name="scheduledDays" id="scheduledDays" min="0">
+            <!-- Quality Metrics Section -->
+            <div class="toggle-section" onclick="toggleSection('qualitySection')">
+                <h2>Quality Metrics Calculator</h2>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div id="qualitySection" class="section-content">
+                <div class="calculator-input">
+                    <div class="input-title">Customer Satisfaction Score</div>
+                    <div class="input-description">Positive surveys / Total surveys</div>
+                    <div class="input-group">
+                        <input type="number" id="positiveSurveys" min="0" placeholder="Positive Surveys" value="0">
+                        <input type="number" id="totalSurveys" min="0" placeholder="Total Surveys" value="0">
+                    </div>
                 </div>
                 
-                <div class="form-question">
-                    <div class="question-title">Absence Days This Month</div>
-                    <input type="number" name="absenceDays" id="absenceDays" min="0">
+                <div class="calculator-input">
+                    <div class="input-title">Quality Assessment Score</div>
+                    <div class="input-description">Example: 7.5/8</div>
+                    <div class="input-group">
+                        <input type="number" id="qualityScore" step="0.1" min="0" placeholder="Score" value="0">
+                        <input type="number" id="qualityMax" min="1" placeholder="Maximum Possible" value="8">
+                    </div>
                 </div>
                 
-                <div class="form-question">
-                    <div class="question-title">Total Tardiness (Hours)</div>
-                    <input type="number" name="tardiness" id="tardiness" step="0.01" min="0">
-                </div>
-                
-                <div class="form-question">
-                    <div class="question-title">Absence Rate</div>
-                    <div class="form-description">Calculated: (Lost Hours / Total Scheduled Hours) × 100%</div>
-                    <div class="calculation-result" id="absenceRateResult">0%</div>
-                </div>
-                
-                <div class="form-question">
-                    <div class="question-title">Schedule Adherence Points</div>
-                    <div class="form-description">How agent follows plotted schedule (Actual Points / Possible Points)</div>
-                    <input type="number" name="actualPoints" id="actualPoints" min="0" placeholder="Actual Points">
-                    <input type="number" name="possiblePoints" id="possiblePoints" min="1" placeholder="Possible Points">
-                    <div class="calculation-result" id="scheduleAdherenceResult">0%</div>
+                <div class="result-section">
+                    <div class="result-item">
+                        <span class="result-label">Customer Satisfaction:</span>
+                        <span id="csatResult">0.00%</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Quality Score:</span>
+                        <span id="qualityResult">0.00%</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Quality Metrics -->
-            <div class="form-section">
-                <h2>Quality Metrics</h2>
-                
-                <div class="form-question">
-                    <div class="question-title">Customer Satisfaction Score</div>
-                    <div class="form-description">Positive surveys / Total surveys</div>
-                    <input type="number" name="positiveSurveys" id="positiveSurveys" min="0" placeholder="Positive Surveys">
-                    <input type="number" name="totalSurveys" id="totalSurveys" min="0" placeholder="Total Surveys">
-                    <div class="calculation-result" id="csatResult">0%</div>
-                </div>
-                
-                <div class="form-question">
-                    <div class="question-title">Quality Assessment Score</div>
-                    <div class="form-description">Example: 7.5/8</div>
-                    <input type="number" name="qualityScore" id="qualityScore" step="0.1" min="0" placeholder="Score">
-                    <input type="number" name="qualityMax" id="qualityMax" min="1" placeholder="Maximum Possible">
-                    <div class="calculation-result" id="qualityResult">0%</div>
+            <!-- All Results Summary Section -->
+            <div class="toggle-section" onclick="toggleSection('summarySection')">
+                <h2>Metrics Summary</h2>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div id="summarySection" class="section-content">
+                <div class="result-section">
+                    <div class="result-item">
+                        <span class="result-label">In Chair Occupancy (ICO):</span>
+                        <span id="summaryIcoResult">100.00%</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Average Handle Time (AHT):</span>
+                        <span id="summaryAhtResult">0.00 minutes</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Units Per Hour (UPH):</span>
+                        <span id="summaryUphResult">0.00 units/hour</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">After Call Work (ACW):</span>
+                        <span id="summaryAcwResult">0.00% of handle time</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Service Level (SL):</span>
+                        <span id="summarySlResult">0.00%</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Absence Rate:</span>
+                        <span id="summaryAbsenceRateResult">0.00%</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Schedule Adherence:</span>
+                        <span id="summaryAdherenceResult">0.00%</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Customer Satisfaction:</span>
+                        <span id="summaryCsatResult">0.00%</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Quality Score:</span>
+                        <span id="summaryQualityResult">0.00%</span>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Additional Comments -->
-            <div class="form-section">
-                <h2>Additional Comments</h2>
-                <div class="form-question">
-                    <div class="question-title">Comments</div>
-                    <textarea name="comments" rows="4" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
-                </div>
-            </div>
-
-            <button type="submit" class="submit-button">Submit</button>
-        </form>
+        <div class="button-group">
+            <button class="reset-button" onclick="resetCalculator()">Reset All Values</button>
+        </div>
     </div>
 
     <script>
-        // Calculate metrics when inputs change
-        document.getElementById('productivityForm').addEventListener('input', function() {
+        // Toggle sections
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.toggle('active');
+            
+            // Change the toggle icon
+            const toggleIcon = section.previousElementSibling.querySelector('.toggle-icon');
+            toggleIcon.textContent = section.classList.contains('active') ? '-' : '+';
+            
+            // Recalculate metrics when a section is opened
+            calculateAllMetrics();
+        }
+        
+        // Reset all calculator values
+        function resetCalculator() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                if (input.id === 'staffedTime') {
+                    input.value = 9;
+                } else if (input.id === 'dailyHours') {
+                    input.value = 8;
+                } else if (input.id === 'scheduledDays') {
+                    input.value = 22;
+                } else if (input.id === 'qualityMax') {
+                    input.value = 8;
+                } else if (input.id === 'possiblePoints') {
+                    input.value = 1;
+                } else {
+                    input.value = 0;
+                }
+            });
+            
+            // Recalculate all metrics after reset
+            calculateAllMetrics();
+        }
+        
+        // Calculate all metrics
+        function calculateAllMetrics() {
             // ICO Calculation
             const staffedTime = parseFloat(document.getElementById('staffedTime').value) || 0;
             const shrinkageHours = parseFloat(document.getElementById('shrinkageHours').value) || 0;
+            
+            let ico = 100;
+            let productiveHours = staffedTime;
+            
             if (staffedTime > 0) {
-                const ico = ((staffedTime - shrinkageHours) / staffedTime) * 100;
-                document.getElementById('icoResult').textContent = ico.toFixed(2) + '%';
+                productiveHours = staffedTime - shrinkageHours;
+                ico = (productiveHours / staffedTime) * 100;
             }
+            
+            document.getElementById('icoResult').textContent = ico.toFixed(2) + '%';
+            document.getElementById('summaryIcoResult').textContent = ico.toFixed(2) + '%';
+            document.getElementById('productiveHoursResult').textContent = productiveHours.toFixed(2) + ' hours';
             
             // Call Handling Metrics
             const talkTime = parseFloat(document.getElementById('talkTime').value) || 0;
@@ -296,68 +444,111 @@
             const handleTime = talkTime + holdTime + acwTime;
             document.getElementById('handleTimeResult').textContent = handleTime.toFixed(2) + ' hours';
             
+            let aht = 0;
+            let uph = 0;
+            let acwPercent = 0;
+            
             if (totalCalls > 0 && handleTime > 0) {
-                const aht = (handleTime * 60) / totalCalls;
-                document.getElementById('ahtResult').textContent = aht.toFixed(2) + ' minutes';
-                
-                const uph = totalCalls / handleTime;
-                document.getElementById('uphResult').textContent = uph.toFixed(2) + ' units/hour';
+                aht = (handleTime * 60) / totalCalls;
+                uph = totalCalls / handleTime;
             }
+            
+            if (handleTime > 0) {
+                acwPercent = (acwTime / handleTime) * 100;
+            }
+            
+            document.getElementById('ahtResult').textContent = aht.toFixed(2) + ' minutes';
+            document.getElementById('summaryAhtResult').textContent = aht.toFixed(2) + ' minutes';
+            document.getElementById('uphResult').textContent = uph.toFixed(2) + ' units/hour';
+            document.getElementById('summaryUphResult').textContent = uph.toFixed(2) + ' units/hour';
+            document.getElementById('acwPercentResult').textContent = acwPercent.toFixed(2) + '% of handle time';
+            document.getElementById('summaryAcwResult').textContent = acwPercent.toFixed(2) + '% of handle time';
             
             // Service Level
             const callsOffered = parseFloat(document.getElementById('callsOffered').value) || 0;
             const callsUnder5 = parseFloat(document.getElementById('callsUnder5').value) || 0;
             
+            let sl = 0;
+            
             if (callsOffered > 0) {
-                const sl = (callsUnder5 / callsOffered) * 100;
-                document.getElementById('slResult').textContent = sl.toFixed(2) + '%';
+                sl = (callsUnder5 / callsOffered) * 100;
             }
             
-            // Absence Rate
+            document.getElementById('slResult').textContent = sl.toFixed(2) + '%';
+            document.getElementById('summarySlResult').textContent = sl.toFixed(2) + '%';
+            
+            // Absence Rate & Schedule Adherence
             const scheduledDays = parseFloat(document.getElementById('scheduledDays').value) || 0;
+            const dailyHours = parseFloat(document.getElementById('dailyHours').value) || 0;
             const absenceDays = parseFloat(document.getElementById('absenceDays').value) || 0;
             const tardiness = parseFloat(document.getElementById('tardiness').value) || 0;
             
-            if (scheduledDays > 0) {
-                const scheduledHours = scheduledDays * 8;
-                const lostHours = (absenceDays * 8) + tardiness;
-                const absenceRate = (lostHours / scheduledHours) * 100;
-                document.getElementById('absenceRateResult').textContent = absenceRate.toFixed(2) + '%';
+            const scheduledHours = scheduledDays * dailyHours;
+            const lostHours = (absenceDays * dailyHours) + tardiness;
+            
+            let absenceRate = 0;
+            
+            if (scheduledHours > 0) {
+                absenceRate = (lostHours / scheduledHours) * 100;
             }
+            
+            document.getElementById('scheduledHoursResult').textContent = scheduledHours.toFixed(2) + ' hours';
+            document.getElementById('lostHoursResult').textContent = lostHours.toFixed(2) + ' hours';
+            document.getElementById('absenceRateResult').textContent = absenceRate.toFixed(2) + '%';
+            document.getElementById('summaryAbsenceRateResult').textContent = absenceRate.toFixed(2) + '%';
             
             // Schedule Adherence
             const actualPoints = parseFloat(document.getElementById('actualPoints').value) || 0;
             const possiblePoints = parseFloat(document.getElementById('possiblePoints').value) || 0;
             
+            let adherence = 0;
+            
             if (possiblePoints > 0) {
-                const adherence = (actualPoints / possiblePoints) * 100;
-                document.getElementById('scheduleAdherenceResult').textContent = adherence.toFixed(2) + '%';
+                adherence = (actualPoints / possiblePoints) * 100;
             }
+            
+            document.getElementById('scheduleAdherenceResult').textContent = adherence.toFixed(2) + '%';
+            document.getElementById('summaryAdherenceResult').textContent = adherence.toFixed(2) + '%';
             
             // CSAT
             const positiveSurveys = parseFloat(document.getElementById('positiveSurveys').value) || 0;
             const totalSurveys = parseFloat(document.getElementById('totalSurveys').value) || 0;
             
+            let csat = 0;
+            
             if (totalSurveys > 0) {
-                const csat = (positiveSurveys / totalSurveys) * 100;
-                document.getElementById('csatResult').textContent = csat.toFixed(2) + '%';
+                csat = (positiveSurveys / totalSurveys) * 100;
             }
+            
+            document.getElementById('csatResult').textContent = csat.toFixed(2) + '%';
+            document.getElementById('summaryCsatResult').textContent = csat.toFixed(2) + '%';
             
             // Quality Score
             const qualityScore = parseFloat(document.getElementById('qualityScore').value) || 0;
             const qualityMax = parseFloat(document.getElementById('qualityMax').value) || 0;
             
+            let qualityPercentage = 0;
+            
             if (qualityMax > 0) {
-                const qualityPercentage = (qualityScore / qualityMax) * 100;
-                document.getElementById('qualityResult').textContent = qualityPercentage.toFixed(2) + '%';
+                qualityPercentage = (qualityScore / qualityMax) * 100;
             }
+            
+            document.getElementById('qualityResult').textContent = qualityPercentage.toFixed(2) + '%';
+            document.getElementById('summaryQualityResult').textContent = qualityPercentage.toFixed(2) + '%';
+        }
+        
+        // Add input event listeners to all input fields
+        const inputFields = document.querySelectorAll('input[type="number"]');
+        inputFields.forEach(input => {
+            input.addEventListener('input', calculateAllMetrics);
         });
-
-        // Prevent default form submission
-        document.getElementById('productivityForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('In a real Google Form, this would submit your data. This is just a demonstration.');
-        });
+        
+        // Initial calculation
+        calculateAllMetrics();
+        
+        // Open the summary section by default
+        document.getElementById('summarySection').classList.add('active');
+        document.querySelector('.toggle-section:last-child .toggle-icon').textContent = '-';
     </script>
 </body>
 </html>
