@@ -74,29 +74,6 @@
                        inset -5px -5px 10px rgba(255,255,255,0.1);
         }
 
-        button {
-            background: #2d2d2d;
-            color: #ffffff;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 5px 5px 10px rgba(0,0,0,0.3),
-                       -5px -5px 10px rgba(255,255,255,0.1);
-        }
-
-        button:hover {
-            background: #4CAF50;
-            color: #000000;
-            box-shadow: inset 3px 3px 6px rgba(0,0,0,0.3),
-                       inset -3px -3px 6px rgba(255,255,255,0.1);
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
         .result {
             font-weight: 600;
             color: #4CAF50;
@@ -106,6 +83,8 @@
             padding: 8px 12px;
             border-radius: 8px;
             background: rgba(76,175,80,0.1);
+            min-width: 100px;
+            display: inline-block;
         }
 
         h2 {
@@ -139,10 +118,9 @@
         <h2>📞 Phone Occupancy</h2>
         <div class="formula">Formula: Handle Hours / (Handle Hours + Avail Hours)</div>
         <div class="input-group">
-            <input type="number" id="handleHours" placeholder="Handle Hours">
-            <input type="number" id="availHours" placeholder="Avail Hours">
-            <button onclick="calculatePhoneOccupancy()">Calculate</button>
-            <div class="result" id="phoneOccupancyResult"></div>
+            <input type="number" id="handleHours" placeholder="Handle Hours" oninput="calculatePhoneOccupancy()">
+            <input type="number" id="availHours" placeholder="Avail Hours" oninput="calculatePhoneOccupancy()">
+            <div class="result" id="phoneOccupancyResult">0%</div>
         </div>
     </div>
 
@@ -151,10 +129,9 @@
         <h2>💺 In-Chair Occupancy</h2>
         <div class="formula">Formula: (Total Staffed Time - Shrinkage) / Total Staffed Time</div>
         <div class="input-group">
-            <input type="number" id="totalStaffed" placeholder="Total Staffed">
-            <input type="number" id="shrinkage" placeholder="Shrinkage Hours">
-            <button onclick="calculateInChairOccupancy()">Calculate</button>
-            <div class="result" id="inChairResult"></div>
+            <input type="number" id="totalStaffed" placeholder="Total Staffed" oninput="calculateInChairOccupancy()">
+            <input type="number" id="shrinkage" placeholder="Shrinkage Hours" oninput="calculateInChairOccupancy()">
+            <div class="result" id="inChairResult">0%</div>
         </div>
     </div>
 
@@ -163,10 +140,9 @@
         <h2>📉 Shrinkage Percentage</h2>
         <div class="formula">Formula: Total Shrinkage Hours / Total Staffed Hours</div>
         <div class="input-group">
-            <input type="number" id="totalShrinkage" placeholder="Shrinkage Hours">
-            <input type="number" id="totalStaffedHours" placeholder="Staffed Hours">
-            <button onclick="calculateShrinkage()">Calculate</button>
-            <div class="result" id="shrinkageResult"></div>
+            <input type="number" id="totalShrinkage" placeholder="Shrinkage Hours" oninput="calculateShrinkage()">
+            <input type="number" id="totalStaffedHours" placeholder="Staffed Hours" oninput="calculateShrinkage()">
+            <div class="result" id="shrinkageResult">0%</div>
         </div>
     </div>
 
@@ -175,10 +151,9 @@
         <h2>📵 Abandon Rate</h2>
         <div class="formula">Formula: Calls Abandoned / Calls Offered</div>
         <div class="input-group">
-            <input type="number" id="abandoned" placeholder="Abandoned">
-            <input type="number" id="offered" placeholder="Offered">
-            <button onclick="calculateAbandonRate()">Calculate</button>
-            <div class="result" id="abandonRateResult"></div>
+            <input type="number" id="abandoned" placeholder="Abandoned" oninput="calculateAbandonRate()">
+            <input type="number" id="offered" placeholder="Offered" oninput="calculateAbandonRate()">
+            <div class="result" id="abandonRateResult">0%</div>
         </div>
     </div>
 
@@ -187,27 +162,25 @@
         <h2>⚖️ Service Level</h2>
         <div class="formula">Formula: (Answered - Over Threshold) / (Answered + Abandoned)</div>
         <div class="input-group">
-            <input type="number" id="answered" placeholder="Answered">
-            <input type="number" id="overThreshold" placeholder="Over Threshold">
-            <input type="number" id="abandonedSL" placeholder="Abandoned">
-            <button onclick="calculateServiceLevel()">Calculate</button>
-            <div class="result" id="serviceLevelResult"></div>
+            <input type="number" id="answered" placeholder="Answered" oninput="calculateServiceLevel()">
+            <input type="number" id="overThreshold" placeholder="Over Threshold" oninput="calculateServiceLevel()">
+            <input type="number" id="abandonedSL" placeholder="Abandoned" oninput="calculateServiceLevel()">
+            <div class="result" id="serviceLevelResult">0%</div>
         </div>
     </div>
 
     <!-- AHT & UPH -->
     <div class="calculator">
         <h2>⏱️ AHT & UPH</h2>
-        <div class="formula">AHT: (Take + ACTV + Hold)*60 / Total Calls | UPH: Total Calls / Handle Hours</div>
+        <div class="formula">AHT: (Take + ACW + Hold)*60 / Total Calls | UPH: Total Calls / Handle Hours</div>
         <div class="input-group">
-            <input type="number" id="take" placeholder="Take">
-            <input type="number" id="actv" placeholder="ACTV">
-            <input type="number" id="hold" placeholder="Hold">
-            <input type="number" id="totalCalls" placeholder="Total Calls">
-            <button onclick="calculateAhtUph()">Calculate</button>
+            <input type="number" id="take" placeholder="Take" oninput="calculateAhtUph()">
+            <input type="number" id="acw" placeholder="ACW" oninput="calculateAhtUph()">
+            <input type="number" id="hold" placeholder="Hold" oninput="calculateAhtUph()">
+            <input type="number" id="totalCalls" placeholder="Total Calls" oninput="calculateAhtUph()">
             <div class="result">
-                AHT: <span id="ahtResult"></span><br>
-                UPH: <span id="uphResult"></span>
+                AHT: <span id="ahtResult">0 mins</span><br>
+                UPH: <span id="uphResult">0 calls/hr</span>
             </div>
         </div>
     </div>
@@ -217,10 +190,9 @@
         <h2>😊 CSAT</h2>
         <div class="formula">Formula: Positive Surveys / Total Surveys</div>
         <div class="input-group">
-            <input type="number" id="positive" placeholder="Positive">
-            <input type="number" id="totalSurveys" placeholder="Total">
-            <button onclick="calculateCSAT()">Calculate</button>
-            <div class="result" id="csatResult"></div>
+            <input type="number" id="positive" placeholder="Positive" oninput="calculateCSAT()">
+            <input type="number" id="totalSurveys" placeholder="Total" oninput="calculateCSAT()">
+            <div class="result" id="csatResult">0%</div>
         </div>
     </div>
 
@@ -229,10 +201,9 @@
         <h2>📈 Productivity %</h2>
         <div class="formula">Formula: Productive Hours / Total Shift Time</div>
         <div class="input-group">
-            <input type="number" id="prodHours" placeholder="Productive">
-            <input type="number" id="totalShift" placeholder="Total Shift">
-            <button onclick="calculateProductivity()">Calculate</button>
-            <div class="result" id="productivityResult"></div>
+            <input type="number" id="prodHours" placeholder="Productive" oninput="calculateProductivity()">
+            <input type="number" id="totalShift" placeholder="Total Shift" oninput="calculateProductivity()">
+            <div class="result" id="productivityResult">0%</div>
         </div>
     </div>
 
@@ -241,10 +212,9 @@
         <h2>⏰ Absenteeism Rate</h2>
         <div class="formula">Formula: Lost Hours / Scheduled Hours</div>
         <div class="input-group">
-            <input type="number" id="lostHours" placeholder="Lost Hours">
-            <input type="number" id="scheduledHours" placeholder="Scheduled">
-            <button onclick="calculateAbsenteeism()">Calculate</button>
-            <div class="result" id="absenteeismResult"></div>
+            <input type="number" id="lostHours" placeholder="Lost Hours" oninput="calculateAbsenteeism()">
+            <input type="number" id="scheduledHours" placeholder="Scheduled" oninput="calculateAbsenteeism()">
+            <div class="result" id="absenteeismResult">0%</div>
         </div>
     </div>
 
@@ -253,94 +223,102 @@
         <h2>📉 Attrition Rate</h2>
         <div class="formula">Formula: Attrition HC / Average(Begin HC, End HC)</div>
         <div class="input-group">
-            <input type="number" id="attritionHC" placeholder="Attrition HC">
-            <input type="number" id="beginHC" placeholder="Begin HC">
-            <input type="number" id="endHC" placeholder="End HC">
-            <button onclick="calculateAttrition()">Calculate</button>
-            <div class="result" id="attritionResult"></div>
+            <input type="number" id="attritionHC" placeholder="Attrition HC" oninput="calculateAttrition()">
+            <input type="number" id="beginHC" placeholder="Begin HC" oninput="calculateAttrition()">
+            <input type="number" id="endHC" placeholder="End HC" oninput="calculateAttrition()">
+            <div class="result" id="attritionResult">0%</div>
         </div>
     </div>
 
     <script>
+        // Auto-calculation functions
         function calculatePhoneOccupancy() {
-            const handle = parseFloat(document.getElementById('handleHours').value);
-            const avail = parseFloat(document.getElementById('availHours').value);
+            const handle = parseFloat(document.getElementById('handleHours').value) || 0;
+            const avail = parseFloat(document.getElementById('availHours').value) || 0;
             const result = handle / (handle + avail) * 100;
-            document.getElementById('phoneOccupancyResult').textContent = isNaN(result) ? 'Invalid input' : `${result.toFixed(2)}%`;
+            document.getElementById('phoneOccupancyResult').textContent = isNaN(result) ? '0%' : `${result.toFixed(2)}%`;
         }
 
         function calculateInChairOccupancy() {
-            const staffed = parseFloat(document.getElementById('totalStaffed').value);
-            const shrinkage = parseFloat(document.getElementById('shrinkage').value);
+            const staffed = parseFloat(document.getElementById('totalStaffed').value) || 0;
+            const shrinkage = parseFloat(document.getElementById('shrinkage').value) || 0;
             const result = ((staffed - shrinkage) / staffed) * 100;
-            document.getElementById('inChairResult').textContent = isNaN(result) ? 'Invalid input' : `${result.toFixed(2)}%`;
+            document.getElementById('inChairResult').textContent = isNaN(result) ? '0%' : `${result.toFixed(2)}%`;
         }
 
         function calculateShrinkage() {
-            const shrinkage = parseFloat(document.getElementById('totalShrinkage').value);
-            const staffed = parseFloat(document.getElementById('totalStaffedHours').value);
+            const shrinkage = parseFloat(document.getElementById('totalShrinkage').value) || 0;
+            const staffed = parseFloat(document.getElementById('totalStaffedHours').value) || 0;
             const result = (shrinkage / staffed) * 100;
-            document.getElementById('shrinkageResult').textContent = isNaN(result) ? 'Invalid input' : `${result.toFixed(2)}%`;
+            document.getElementById('shrinkageResult').textContent = isNaN(result) ? '0%' : `${result.toFixed(2)}%`;
         }
 
         function calculateAbandonRate() {
-            const abandoned = parseFloat(document.getElementById('abandoned').value);
-            const offered = parseFloat(document.getElementById('offered').value);
+            const abandoned = parseFloat(document.getElementById('abandoned').value) || 0;
+            const offered = parseFloat(document.getElementById('offered').value) || 0;
             const result = (abandoned / offered) * 100;
-            document.getElementById('abandonRateResult').textContent = isNaN(result) ? 'Invalid input' : `${result.toFixed(2)}%`;
+            document.getElementById('abandonRateResult').textContent = isNaN(result) ? '0%' : `${result.toFixed(2)}%`;
         }
 
         function calculateServiceLevel() {
-            const answered = parseFloat(document.getElementById('answered').value);
-            const over = parseFloat(document.getElementById('overThreshold').value);
-            const abandoned = parseFloat(document.getElementById('abandonedSL').value);
+            const answered = parseFloat(document.getElementById('answered').value) || 0;
+            const over = parseFloat(document.getElementById('overThreshold').value) || 0;
+            const abandoned = parseFloat(document.getElementById('abandonedSL').value) || 0;
             const result = ((answered - over) / (answered + abandoned)) * 100;
-            document.getElementById('serviceLevelResult').textContent = isNaN(result) ? 'Invalid input' : `${result.toFixed(2)}%`;
+            document.getElementById('serviceLevelResult').textContent = isNaN(result) ? '0%' : `${result.toFixed(2)}%`;
         }
 
         function calculateAhtUph() {
-            const take = parseFloat(document.getElementById('take').value);
-            const actv = parseFloat(document.getElementById('actv').value);
-            const hold = parseFloat(document.getElementById('hold').value);
-            const calls = parseFloat(document.getElementById('totalCalls').value);
-            const handleHours = take + actv + hold;
+            const take = parseFloat(document.getElementById('take').value) || 0;
+            const acw = parseFloat(document.getElementById('acw').value) || 0;
+            const hold = parseFloat(document.getElementById('hold').value) || 0;
+            const calls = parseFloat(document.getElementById('totalCalls').value) || 0;
+            const handleHours = take + acw + hold;
             
-            const aht = (handleHours * 60) / calls;
-            const uph = calls / handleHours;
+            const aht = calls ? (handleHours * 60) / calls : 0;
+            const uph = handleHours ? calls / handleHours : 0;
             
-            document.getElementById('ahtResult').textContent = isNaN(aht) ? 'Invalid input' : `${aht.toFixed(2)} mins`;
-            document.getElementById('uphResult').textContent = isNaN(uph) ? 'Invalid input' : `${uph.toFixed(2)} calls/hr`;
+            document.getElementById('ahtResult').textContent = isNaN(aht) ? '0 mins' : `${aht.toFixed(2)} mins`;
+            document.getElementById('uphResult').textContent = isNaN(uph) ? '0 calls/hr' : `${uph.toFixed(2)} calls/hr`;
         }
 
         function calculateCSAT() {
-            const positive = parseFloat(document.getElementById('positive').value);
-            const total = parseFloat(document.getElementById('totalSurveys').value);
-            const result = (positive / total) * 100;
-            document.getElementById('csatResult').textContent = isNaN(result) ? 'Invalid input' : `${result.toFixed(2)}%`;
+            const positive = parseFloat(document.getElementById('positive').value) || 0;
+            const total = parseFloat(document.getElementById('totalSurveys').value) || 0;
+            const result = total ? (positive / total) * 100 : 0;
+            document.getElementById('csatResult').textContent = isNaN(result) ? '0%' : `${result.toFixed(2)}%`;
         }
 
         function calculateProductivity() {
-            const prod = parseFloat(document.getElementById('prodHours').value);
-            const total = parseFloat(document.getElementById('totalShift').value);
-            const result = (prod / total) * 100;
-            document.getElementById('productivityResult').textContent = isNaN(result) ? 'Invalid input' : `${result.toFixed(2)}%`;
+            const prod = parseFloat(document.getElementById('prodHours').value) || 0;
+            const total = parseFloat(document.getElementById('totalShift').value) || 0;
+            const result = total ? (prod / total) * 100 : 0;
+            document.getElementById('productivityResult').textContent = isNaN(result) ? '0%' : `${result.toFixed(2)}%`;
         }
 
         function calculateAbsenteeism() {
-            const lost = parseFloat(document.getElementById('lostHours').value);
-            const scheduled = parseFloat(document.getElementById('scheduledHours').value);
-            const result = (lost / scheduled) * 100;
-            document.getElementById('absenteeismResult').textContent = isNaN(result) ? 'Invalid input' : `${result.toFixed(2)}%`;
+            const lost = parseFloat(document.getElementById('lostHours').value) || 0;
+            const scheduled = parseFloat(document.getElementById('scheduledHours').value) || 0;
+            const result = scheduled ? (lost / scheduled) * 100 : 0;
+            document.getElementById('absenteeismResult').textContent = isNaN(result) ? '0%' : `${result.toFixed(2)}%`;
         }
 
         function calculateAttrition() {
-            const attrition = parseFloat(document.getElementById('attritionHC').value);
-            const begin = parseFloat(document.getElementById('beginHC').value);
-            const end = parseFloat(document.getElementById('endHC').value);
+            const attrition = parseFloat(document.getElementById('attritionHC').value) || 0;
+            const begin = parseFloat(document.getElementById('beginHC').value) || 0;
+            const end = parseFloat(document.getElementById('endHC').value) || 0;
             const average = (begin + end) / 2;
-            const result = (attrition / average) * 100;
-            document.getElementById('attritionResult').textContent = isNaN(result) ? 'Invalid input' : `${result.toFixed(2)}%`;
+            const result = average ? (attrition / average) * 100 : 0;
+            document.getElementById('attritionResult').textContent = isNaN(result) ? '0%' : `${result.toFixed(2)}%`;
         }
+
+        // Initialize all calculations on page load
+        window.onload = function() {
+            document.querySelectorAll('input').forEach(input => {
+                const event = new Event('input');
+                input.dispatchEvent(event);
+            });
+        };
     </script>
 </body>
 </html>
